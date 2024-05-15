@@ -1,116 +1,91 @@
-# twin_aydo
+# Freeflow Twin
 
-# Current stack
+Welcome to FreeFlow Twin (formerly known as Uhuru) – a revolutionary digital experience that empowers users with alternatives to centralized social media, messaging apps, file storage, document management, web browsers, and video conferencing.
 
-FreeFlow currently has 5 different components:
+## Components
 
--   Dashboard (posts)
--   Whisper (messaging)
--   Quantum (file sharing)
--   Glass (secure browsing)
--   Kutana (meetings)
+FreeFlow Twin comprises five distinct components, each designed to elevate your digital journey:
 
-## Dashboard
+1. **Social Media Dashboard (Posts)**: Immerse yourself in a vibrant social media ecosystem where you can seamlessly share your thoughts, engage with others' posts, and enjoy real-time chatting with friends and peers.
 
-Flow is a social section where you can keep in touch with all your contacts.
+2. **Whisper (Messaging)**: Experience a dynamic messaging service that connects you with friends and family, ensuring smooth communication and instant sharing of ideas.
 
-Codebase for Dasbhoard: https://github.com/threefoldtech/twin_aydo/
+3. **Quantum (File Sharing)**: Unlock the potential of Quantum, a cutting-edge shared-storage software platform. Quantum boasts a high-speed file system that spans diverse storage types within a unified namespace, complete with integrated data lifecycle management capabilities.
 
-## Whisper
+4. **Glass (Secure Browsing)**: Glass isn't your ordinary browser; it's a privacy-focused search engine offering the "DuckDuckGo Privacy Essentials" web browser extension. Protect your privacy by thwarting trackers and enforcing encryption while enjoying a seamless browsing experience.
 
-Whisper is a fully fledged chat service with all the features you'd expect from an advanced chat service like telegram or whatsapp.
+5. **Kutana (Meetings)**: Need a platform for small, collaborative meetings? Look no further than Kutana. Embedded within FreeFlow Twin, Kutana facilitates effortless team gatherings and interactions with friends.
 
-Codebase for Whisper: https://github.com/threefoldtech/twin_aydo/
+---
 
-## Quantum
+We believe in empowering users with freedom of choice and enhanced data privacy, and FreeFlow Twin represents our commitment to a decentralized digital future. Join us on this journey and embrace a new era of online experiences.
 
-Quantum is a full file management system, including an open-source office files editor.
+---
 
-Codebase for Quantum: https://github.com/threefoldtech/twin_aydo/
+## Development Setup
 
-## Glass
+To set up the development environment, follow these steps:
 
-Glass is a safe browsing experience using browser isolation technology. You can read more about browser isolation at https://jimber.io/en/what-is-browser-isolation-jimber/
+1. Create a network called `chatnet` to enable communication between containers. Ensure you have Docker and Docker Compose installed on your local machine, and then execute the following command in the terminal:
 
-Codebase for Glass: https://github.com/JimberSoftware/browser
-
-### Kutana
-
-Kutana is a meetings tool like zoom, which allows anyone to do safe video meetings without having to entrust your data to third-party services like zoom or google.
-
-Codebase for Kutana: https://github.com/freeflowuniverse/freeflow_kutana_ui
-
-# Development setup
-
-## Network
-
-Create a docker network so internal communication is possible
-
-```console
-docker network create chatnet
+```sh
+root:~$ docker network create chatnet
 ```
 
-## Spawner
+-   Build and launch the spawner containers:
 
-Go to the Spawner
-
-```console
-cd apps/spawner
+```sh
+root:~$ cd apps/spawner
+root:freeflow/apps/spawner$ docker-compose build && docker-compose up -d
+# Remove the -d if you want to see the logs.
 ```
 
-In the docker-compose.yaml you need to adjust 2 lines to make it work.
+-   After the spawner containers are up, navigate to the main folder and then the dev folder. Create the `appdata` folder and subfolders:
 
--   On line 11 there is a folder mapped to `/config`. Either map a folder to it or just comment it out when no config is neeeded.
--   0n line 24 you need to map some certifications. There is a `certs` folder included in this project, use these. `../certs`
-
-Then run inside the `spawner` folder.
-
-```console
-docker-compose up
+```sh
+root:freeflow/apps/spawner$ cd ... &&  cd docker/dev
+root:freeflow/docker/dev$ mkdir appdata && mkdir appdata/chats && mkdir appdata/user
+# Copy the avatar image to the user folder
+cp ../avatar.jpg ./appdata/user/avatar-default.jpg
 ```
 
-Use `-d` to detach the process.
+-   Add or edit instances for the chat application in the `docker-compose-example.yml` file. Look for an example commented with `$3bot`, and replace `$3bot` with your desired 3bot name.
 
-## Chat containers
-
-Go into dev folder
-
-```console
-cd ../docker/dev
+```yml
+# docker-compose-example.yml
+services:
+    your-3bot-name-digitaltwin:
+        container_name: your-3bot-name-chat
+        # ... the rest of the docker-compose file should be updated with your 3bot name
 ```
 
-Creation of appdata
+Make sure every user has their own appdata folder, and ensure the container name ends with `-chat` (e.g., `your-3bot-name-chat`).
+If you don't want the staging login flow, remove the `ENVIRONMENT=development` line or change it to production.
+Build and launch the chat containers:
 
-```console
-mkdir ./appdata
-mkdir ./appdata/chats
-mkdir ./appdata/user
-cp ../avatar.jpg ./appdata/user/avatar-default
+```sh
+root:freeflow/docker/dev$ docker-compose build && docker-compose up -d
+# Remove the -d if you want to see the logs.
 ```
 
-Add or edit instances for the chat application in the docker-compose file. There should be an example commented where `$3bot` can be replace with any 3bot name.
+Finally, modify your hosts file since this project is `domain-based`. Add two rules to the hosts file, changing `$3bot` to the configured `3bot` name in the `docker-compose` file. Duplicate the rules for every chat container.
 
--   Make sure every user has his own `appdata` folder!
--   Make sure the container name end with '-chat'
--   If you don't want the staging login flow, remove the `ENVIRONMENT=developement` or change to `production`
+### Linux
 
-Build the containers
-
-```console
-docker compose up
+```sh
+root:freeflow/docker/dev$ sudo vim /etc/hosts
 ```
 
-Use `-d` to detach the process.
-
-## Hosts file
-
-Add two rules to the hosts file, change `$3bot` to the configured 3bot name in the docker-compose file. Duplicate for every `chat` containter.
-
-```console
-sudo vim /etc/hosts
-```
-
-```
+```vim
 127.0.0.1 digitaltwin.jimbertesting.be
-127.0.0.1 $3bot.digitaltwin.jimbertesting.be
+127.0.0.1 your-3bot-name.digitaltwin.jimbertesting.be
+127.0.0.1 digitaltwin-test.jimbertesting.be,
 ```
+
+### Windows and macOS
+
+Refer to How to Edit Hosts File in Windows and macOS for instructions on editing the hosts file.
+
+---
+
+Inspired by innovation, driven by freedom. 🚀✨

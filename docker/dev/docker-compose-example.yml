@@ -1,19 +1,19 @@
 version: "3"
 
 services:
-  edwardker-digitaltwin:
-    container_name: edwardker-chat
+  $3bot-digitaltwin:
+    container_name: $3bot-chat
     build:
       context: ../..
       dockerfile: ./docker/dev/Dockerfile
     restart: always
     environment:
-      - USER_ID=edwardker
+      - USER_ID=$3bot
       - ENVIRONMENT=development
       - DIGITALTWIN_APPID=digitaltwin.jimbertesting.be
     volumes:
       - ../..:/app
-      - ./appdata_edwardker:/appdata
+      - ./$appdata_3bot:/appdata
       # - ./dev/logs:/var/log/
       # - ./dev/logs:/var/log
     networks:
@@ -57,11 +57,11 @@ services:
       - chatnet
     restart: always
     environment:
-      - REDIS_HOSTS=local:edwardker-digitaltwin:6379,local:debug-digitaltwin:6379
+      - REDIS_HOSTS=local:$3bot-digitaltwin:6379,local:debug-digitaltwin:6379
     ports:
       - "8081:8081"
     depends_on:
-      - edwardker-digitaltwin
+      - $3bot-digitaltwin
 
 networks:
   chatnet:

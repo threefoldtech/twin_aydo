@@ -18,18 +18,18 @@ services:
             - ENVIRONMENT=${ENVIRONMENT}
 
     # ONLY ENABLE IN DEVELOPMENT
-    #    digitaltwin_proxy:
-    #        image: nginx:alpine
-    #        container_name: digital_twin_proxy
-    #        restart: always
-    #        volumes:
-    #            - ../../docker/certs:/etc/nginx/certs
-    #            - ./proxy/nginx.conf:/etc/nginx/nginx.conf
-    #        ports:
-    #            - 443:443
-    #            - 80:80
-    #        networks:
-    #            - chatnet
+    digitaltwin_proxy:
+        image: nginx:alpine
+        container_name: digital_twin_proxy
+        restart: always
+        volumes:
+            - ../../docker/certs:/etc/nginx/certs
+            - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - 443:443
+            - 80:80
+        networks:
+            - chatnet
 
     digital_twin_frontend:
         image: registry.gitlab.com/3bot_app_jimber/digital_twin_frontend:${digital_twin_frontend_tag}
@@ -43,6 +43,8 @@ services:
         build:
             context: ./onlyoffice
         container_name: onlyoffice-documentserver
+        environment:
+            - JWT_ENABLED=false
         restart: always
         networks:
             - chatnet

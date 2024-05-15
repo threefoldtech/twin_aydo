@@ -240,7 +240,7 @@ export class QuantumController {
 
         const url = new URL(editFileResponse.url);
 
-        const hostName = this._configService.get<string>("documentServerLocation")
+        const hostName = this._configService.get<string>('documentServerLocation');
 
         url.hostname = hostName;
         url.protocol = 'https:';

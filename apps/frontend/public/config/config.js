@@ -2,7 +2,7 @@ import config from '/config/config-def.js';
 
 // const config = {
 //     appBackend: 'https://login.threefold.me/',
-//     documentServerLocation: 'https://documentserver.digitaltwin.jimbertesting.be/',
+//     documentServerLocation: 'https://documentserver.demo.freeflow.life/',
 //     giphyApiKey: 'uk3XRSO0vYrPDEQKDPZJ2wGz33qzIxST',
 //     beta: true,
 // };

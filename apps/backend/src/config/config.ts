@@ -12,5 +12,5 @@ export default () => ({
     sessionSecret: process.env.SESSION_SECRET || 'secret',
     smallPingTimeoutAxiosRequest: 1000,
     bigPingTimeoutAxiosRequest: 2000,
-    documentServerLocation: process.env.DOCUMENT_SERVER_LOCATION || "https://documentserver.demo.freeflow.life/"
+    documentServerLocation: process.env.DOCUMENT_SERVER_LOCATION || 'https://documentserver.demo.freeflow.life/',
 });

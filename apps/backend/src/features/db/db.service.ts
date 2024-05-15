@@ -6,7 +6,7 @@ import { Client, Entity, Repository, Schema } from 'redis-om';
 export class DbService {
     private client: Client;
 
-    private redisURL = `redis://default:jimber321123@127.0.0.1:6379`;
+    private redisURL = `redis://default:PASSWORD@127.0.0.1:6379`;
 
     constructor() {
         this.client = new Client();
