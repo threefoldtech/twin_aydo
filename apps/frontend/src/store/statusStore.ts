@@ -4,7 +4,7 @@ import { reactive } from '@vue/reactivity';
 import { useAuthState } from '@/store/authStore';
 import { calcExternalResourceLink } from '@/services/urlService';
 import { Contact } from '@/types';
-import { useDebounceFn } from '@vueuse/core';
+import config from '@/config';
 
 export const statusList = reactive<Object>({});
 export const fetching: string[] = [];
@@ -19,7 +19,7 @@ export const fetchStatus = async (digitalTwinId: string, fetch = false) => {
     const locationApiEndpoint = '/api/v2/user/status';
     let location = '';
     if (digitalTwinId == user.id) {
-        location = `${window.location.origin}${locationApiEndpoint}`;
+        location = `${config.baseUrl}${locationApiEndpoint}`;
     } else {
         location = calcExternalResourceLink(
             `http://[${watchingUsers[<string>digitalTwinId].location}]${locationApiEndpoint}`

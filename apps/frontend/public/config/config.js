@@ -7,6 +7,7 @@ import config from '/config/config-def.js';
 //     beta: true,
 // };
 
-config.baseUrl = `${window.location.origin}/`;
+// config.baseUrl = `${window.location.origin}/`;
+config.baseUrl = `http://localhost:3001/`;
 
 window.config = config;

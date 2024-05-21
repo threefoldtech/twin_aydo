@@ -24,6 +24,7 @@ import { AppType } from '@/types/apps';
 import { usechatsActions, useChatsState } from './chatStore';
 import { isArray } from 'lodash';
 import { decodeString } from '@/utils/files';
+import config from '@/config';
 
 declare const Buffer;
 
@@ -1007,7 +1008,7 @@ export const getExternalPathInfo = async (digitalTwinId: string, token: string, 
     const locationApiEndpoint = `/api/v2/quantum/file/info?params=${btoa(JSON.stringify(params))}`;
     let location = '';
     if (digitalTwinId == user.id) {
-        location = `${window.location.origin}${locationApiEndpoint}`;
+        location = `${config.baseUrl}${locationApiEndpoint}`;
     } else {
         location = calcExternalResourceLink(
             `http://[${watchingUsers[<string>digitalTwinId].location}]${locationApiEndpoint}`

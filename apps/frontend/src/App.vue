@@ -41,6 +41,7 @@
     import { useSocketActions } from '@/store/socketStore';
     import { initBlocklist } from '@/store/blockStore';
     import { sendIdentifierToBackend } from '@/services/firebaseService';
+    import config from '@/config';
 
     const { user } = useAuthState();
     const { initializeSocket } = useSocketActions();
@@ -59,7 +60,7 @@
         if (profile.username) {
             user.id = profile.username;
             user.email = profile.email;
-            user.image = `${window.location.origin}/api/v2/user/avatar`;
+            user.image = `${config.baseUrl}/api/v2/user/avatar`;
 
             await sendIdentifierToBackend();
         }
