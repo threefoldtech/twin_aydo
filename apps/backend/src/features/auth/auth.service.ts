@@ -21,11 +21,11 @@ export class AuthService {
      * @param {string} redirectUrl - Redirection Url.
      * @return {loginState: string, loginUrl: string} - The generated loginState and Url.
      */
-    async getAppLogin(redirectUrl?: string): Promise<{ loginState: string; loginUrl: string }> {
+    async getAppLogin(host?: string, redirectUrl?: string): Promise<{ loginState: string; loginUrl: string }> {
         try {
             this.tfLogin = new ThreefoldLogin(
                 this._configService.get<string>('appBackend'),
-                this._configService.get<string>('appId'),
+                host || this._configService.get<string>('appId'),
                 this._configService.get<string>('seedPhrase'),
                 redirectUrl ?? '',
                 this._configService.get<string>('kycBackend')

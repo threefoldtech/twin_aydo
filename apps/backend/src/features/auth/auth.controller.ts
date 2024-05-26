@@ -38,8 +38,8 @@ export class AuthController {
 
     @Get('signIn')
     @Redirect()
-    async signIn(@Session() session: Record<string, unknown>, @Query() query: SignInQuery) {
-        const appLogin = await this._authService.getAppLogin(`/api/v2/auth/callback`);
+    async signIn(@Req() req: Request, @Session() session: Record<string, unknown>, @Query() query: SignInQuery) {
+        const appLogin = await this._authService.getAppLogin(req.hostname, `/api/v2/auth/callback`);
         session.state = appLogin.loginState;
         const loginUrl = `${appLogin.loginUrl}&username=${query.username}`;
         return { url: loginUrl };
