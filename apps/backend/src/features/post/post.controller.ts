@@ -32,7 +32,9 @@ export class PostController {
 
     @Post()
     @UseGuards(AuthGuard)
-    async createPost(@Body() createPostDTO: CreatePostDTO): Promise<IPostContainerDTO> {
+    async createPost(@Body() createPostDTO: any /* CreatePostDTO */): Promise<IPostContainerDTO> {
+        console.log(createPostDTO);
+
         return await this._postService.createPost(createPostDTO);
     }
 

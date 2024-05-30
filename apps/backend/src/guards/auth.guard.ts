@@ -6,6 +6,7 @@ import { EncryptionService } from '../features/encryption/encryption.service';
 import { KeyService } from '../features/key/key.service';
 import { KeyType } from '../features/key/models/key.model';
 import { YggdrasilService } from '../features/yggdrasil/yggdrasil.service';
+import { bypassAuth } from '../constants';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -17,6 +18,10 @@ export class AuthGuard implements CanActivate {
     ) {}
 
     async canActivate(context: ExecutionContext) {
+        if (bypassAuth) {
+            return true;
+        }
+
         const isDevelopment = this._configService.get('NODE_ENV') === 'development';
         const userId = this._configService.get<string>('userId');
 

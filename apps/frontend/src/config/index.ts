@@ -1,3 +1,5 @@
+import { bypassAuth, bypassEndpoint } from '@/constants';
+
 interface IConfig {
     spawnerUrl: string;
     baseUrl: string;
@@ -48,7 +50,7 @@ class Config implements IConfig {
 const c = <IConfig>window.config;
 const config = new Config(
     c.spawnerUrl,
-    c.baseUrl,
+    bypassAuth ? bypassEndpoint : c.baseUrl,
     c.appBackend,
     c.documentServerLocation,
     c.giphyApiKey,

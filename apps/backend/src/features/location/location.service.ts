@@ -4,6 +4,7 @@ import { ApiService } from '../api/api.service';
 import { EncryptionService } from '../encryption/encryption.service';
 import { YggdrasilService } from '../yggdrasil/yggdrasil.service';
 import { LocationResponse } from './types/responses';
+import { bypassAuth } from '../../constants';
 
 @Injectable()
 export class LocationService {
@@ -40,6 +41,10 @@ export class LocationService {
      * @return {Error} - Error.
      */
     async getOwnLocation(): Promise<string | Error> {
+        if (bypassAuth) {
+            return 'address';
+        }
+
         if (this.location === '') this.location = (await this._yggdrasilService.getSelf()) as string;
         if (this.location.length < 1) return null;
         return this.location;

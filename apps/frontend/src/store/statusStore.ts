@@ -5,6 +5,7 @@ import { useAuthState } from '@/store/authStore';
 import { calcExternalResourceLink } from '@/services/urlService';
 import { Contact } from '@/types';
 import { useDebounceFn } from '@vueuse/core';
+import { bypassAuth, bypassEndpoint } from '@/constants';
 
 export const statusList = reactive<Object>({});
 export const fetching: string[] = [];
@@ -19,7 +20,7 @@ export const fetchStatus = async (digitalTwinId: string, fetch = false) => {
     const locationApiEndpoint = '/api/v2/user/status';
     let location = '';
     if (digitalTwinId == user.id) {
-        location = `${window.location.origin}${locationApiEndpoint}`;
+        location = `${bypassAuth ? bypassEndpoint : window.location.origin}${locationApiEndpoint}`;
     } else {
         location = calcExternalResourceLink(
             `http://[${watchingUsers[<string>digitalTwinId].location}]${locationApiEndpoint}`
@@ -27,6 +28,8 @@ export const fetchStatus = async (digitalTwinId: string, fetch = false) => {
     }
     try {
         const { data } = await axios.get(location, { timeout: 5000 });
+        console.log({ data });
+
         statusList[<string>digitalTwinId] = data;
         return data;
     } catch (error) {

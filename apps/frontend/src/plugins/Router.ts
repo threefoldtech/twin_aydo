@@ -40,6 +40,7 @@ const Browser = () => import('@/views/app/Browser.vue');
 
 import { setHasBrowserBeenStartedOnce } from '@/store/browserStore';
 import { sendCurrentURL } from '@/store/socketStore';
+import { bypassAuth } from '@/constants';
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -279,6 +280,11 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, _from, next) => {
+    // Bypass login for now
+    if (bypassAuth) {
+        return next();
+    }
+
     const needsAuth = to.matched.some(record => record.meta.requiresAuth);
     const needsUnAuth = to.matched.some(record => record.meta.requiresUnAuth);
 

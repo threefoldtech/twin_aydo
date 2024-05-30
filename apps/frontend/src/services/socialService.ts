@@ -9,7 +9,7 @@ import { CommentType, IPostComment, IPostContainerDTO, IPostDTO, PostType } from
 import { useSocketActions } from '../store/socketStore';
 import { FileAction } from 'custom-types/file-actions.type';
 
-const endpoint = `${config.baseUrl}api/v2/posts`;
+const endpoint = `${config.baseUrl}/api/v2/posts`;
 const { user } = useAuthState();
 
 interface socialMeta {
@@ -95,7 +95,12 @@ export const sortPosts = (posts: IPostContainerDTO[]) => {
 
 export const getAllPosts = async () => {
     isLoadingSocialPosts.value = true;
-    const posts = (await axios.get<any>(`${endpoint}/${user.id}`)).data;
+    let posts: any;
+    try {
+        posts = (await axios.get<any>(`${endpoint}/${user.id}`)).data;
+    } catch (err) {
+        console.log({ endpoint, err });
+    }
     isLoadingSocialPosts.value = false;
     allSocialPosts.value = sortPosts(posts);
 };

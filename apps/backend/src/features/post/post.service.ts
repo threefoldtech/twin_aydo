@@ -16,6 +16,7 @@ import { PostGateway } from './post.gateway';
 import { PostRedisRepository } from './repositories/post-redis.repository';
 import { LikeCommentDTO } from './dtos/request/like-comment.dto';
 import { DeleteCommentDTO } from './dtos/delete-comment.dto';
+import { bypassAuth } from '../../constants';
 
 @Injectable()
 export class PostService {
