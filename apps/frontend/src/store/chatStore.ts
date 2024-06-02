@@ -27,6 +27,7 @@ import { useScrollActions } from './scrollStore';
 import { blocklist } from '@/store/blockStore';
 import { FileAction } from 'custom-types/file-actions.type';
 import { useDebounceFn } from '@vueuse/core';
+import { bypassAuth } from '@/constants';
 
 const messageLimit = 50;
 const state = reactive<ChatState>({
@@ -81,7 +82,7 @@ const retrieveChats = async () => {
     const params = new URLSearchParams();
     params.append('limit', messageLimit.toString());
     isLoading.value = true;
-    const res = await axios.get(`${config.baseUrl}api/v2/chats`, { params: params });
+    const res = await axios.get(`${config.baseUrl}${bypassAuth ? '/' : ''}api/v2/chats`, { params: params });
     const incomingChats = res.data;
 
     incomingChats.forEach((chat: Chat) => addChat(chat));

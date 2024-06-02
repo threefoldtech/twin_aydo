@@ -7,6 +7,7 @@ import { EncryptionService } from '../encryption/encryption.service';
 import { MessageDTO } from '../message/dtos/message.dto';
 import { Key, KeyType } from './models/key.model';
 import { KeyRedisRepository } from './repositories/key-redis.repository';
+import { bypassAuth } from '../../constants';
 
 @Injectable()
 export class KeyService {
@@ -72,6 +73,14 @@ export class KeyService {
      * @return {Key} - Found public or private key.
      */
     async getKey({ keyType, userId }: { keyType: KeyType; userId: string }): Promise<Key> {
+        if (bypassAuth) {
+            return {
+                userId,
+                key: 'key',
+                keyType,
+            } as Key;
+        }
+
         try {
             return this._keyRepo.getKey({ keyType, userId });
         } catch (error) {
@@ -86,9 +95,11 @@ export class KeyService {
      */
     async appendSignatureToMessage({ message }: { message: MessageDTO<unknown> }): Promise<MessageDTO<unknown>> {
         const userId = this._configService.get<string>('userId');
+
         const { key } = await this.getKey({ keyType: KeyType.Private, userId });
         if (!key) return;
         const signature = this._encryptionService.createBase64Signature({ data: message, secretKey: key });
+        console.log({ key });
         message.signatures ? message.signatures.unshift(signature) : (message.signatures = [signature]);
 
         return message;

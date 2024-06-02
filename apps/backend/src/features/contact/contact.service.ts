@@ -91,6 +91,8 @@ export class ContactService {
      * @return {Contact} - Created entity.
      */
     async createNewContact({ id, location, message }: CreateContactDTO<MessageBody>): Promise<Contact> {
+        console.log({ id, location, message });
+
         const yggdrasilAddress = await this._locationService.getOwnLocation();
         const me = {
             id: this._configService.get<string>('userId'),
@@ -99,6 +101,8 @@ export class ContactService {
 
         let newContact = await this.getContact({ id });
         if (newContact?.accepted) message.body.message = `You can now start chatting with ${newContact.id} again`;
+
+        console.log('here tyb?');
 
         if (!newContact) {
             try {

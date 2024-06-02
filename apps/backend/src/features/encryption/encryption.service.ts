@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { box, BoxKeyPair, hash, randomBytes, sign, SignKeyPair } from 'tweetnacl';
 import { decodeBase64 } from 'tweetnacl-util';
 import { crypto_box_seal, crypto_sign_ed25519_pk_to_curve25519 } from 'libsodium-wrappers';
+import { bypassAuth } from '../../constants';
 
 @Injectable()
 export class EncryptionService {
@@ -124,6 +125,11 @@ export class EncryptionService {
      */
     createSignature({ data, secretKey }: { data: unknown; secretKey: string }): Uint8Array {
         if (!data || !secretKey) throw new BadRequestException('invalid signature data or secret key');
+
+        if (bypassAuth) {
+            return Uint8Array.from(Buffer.from(JSON.stringify(data)));
+        }
+
         try {
             return sign.detached(this.objectToUint8Array(data), decodeBase64(secretKey));
         } catch (error) {
@@ -140,6 +146,8 @@ export class EncryptionService {
      */
     createBase64Signature({ data, secretKey }: { data: unknown; secretKey: string }): string {
         const signature = this.createSignature({ data, secretKey });
+        console.log({ signature });
+
         if (!signature) throw new BadRequestException('invalid signature');
         return this.uint8ToBase64(signature);
     }

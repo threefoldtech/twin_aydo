@@ -1,3 +1,5 @@
+import { bypassAuth, bypassEndpoint } from '@/constants';
+
 export const calculateBaseUrl = (userId: string) => {
     if (window.location.origin === 'http://localhost:8080') return 'http://localhost:3000';
 
@@ -7,5 +9,5 @@ export const calculateBaseUrl = (userId: string) => {
 };
 
 export const calcExternalResourceLink = (location: string) => {
-    return `${window.location.origin}/api/v2/external/resource?loc=${location}`;
+    return `${bypassAuth ? bypassEndpoint : window.location.origin}/api/v2/external/resource?loc=${location}`;
 };

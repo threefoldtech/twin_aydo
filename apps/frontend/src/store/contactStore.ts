@@ -52,7 +52,8 @@ const addContact = async (username: string, location: string, _dontCheck = false
         replies: [],
         subject: null,
     };
-    const { data } = await axios.post(`${config.baseUrl}api/v2/contacts`, {
+
+    const { data } = await axios.post(`${config.baseUrl}/api/v2/contacts`, {
         id: username,
         location,
         message: addMessage,

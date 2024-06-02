@@ -7,6 +7,7 @@
 <script lang="ts" setup>
     import { useRouter } from 'vue-router';
     import { getMe, useAuthState } from '@/store/authStore';
+    import { bypassAuth, bypassEndpoint } from '@/constants';
 
     const { user } = useAuthState();
 
@@ -19,7 +20,7 @@
 
         user.id = profile.username;
         user.email = profile.email;
-        user.image = `${window.location.origin}/api/v2/user/avatar`;
+        user.image = `${bypassAuth ? bypassEndpoint : window.location.origin}/api/v2/user/avatar`;
     };
 
     init();
